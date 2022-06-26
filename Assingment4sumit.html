@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> SumitG Assignment 4</title>
+    <script>
+
+        class Employee {
+            constructor(empid, empname, email, deptid) {
+                this.empid = empid;
+                this.empname = empname;
+                this.email = email;
+                this.deptid = deptid;
+
+            }
+        }
+
+        class Logic {
+            constructor() {
+
+                this.arr = [new Employee(1, "Sumit Ghatule", "sg@yahoo.com", 1),
+                new Employee(2, "Suraj Gawade", "sgg@gmail.com", 1),
+                new Employee(3, "Vasim Aaga", "va@yahoo.com", 2),
+                new Employee(4, "Tejas Gore", "tg@gmail.com", 2),
+                new Employee(5, "Vaibhav Mahajan", "vm@gmail.com", 1)];
+            }
+
+            getItemDetailsLogic(empid) {
+
+                let output = { result: false, empdetails: {} };
+                for (let i = 0; i < this.arr.length; i++) {
+                    if (this.arr[i].empid == empid) {
+                        output.result = true;
+                        output.empdetails = this.arr[i];
+                        break;
+                    }
+
+                }
+                return output;
+            }
+
+            addItemDetailsLogic(obj) {
+                console.log(obj);
+                this.arr.push(obj);
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#msg").innerHTML = "Employee is Added Successfully";
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#empname").value = "";
+                document.querySelector("#email").value = "";
+                document.querySelector("#deptid").value = "";
+                document.querySelector("#empid").value = "";
+            }
+
+            modifyItemDetailsLogic() {
+                document.querySelector("#msg").innerHTML = "Only Email can be Updated";
+
+                let i;
+                for (i = 0; i < this.arr.length; i++) {
+                    if (this.arr[i].empid == parseInt(document.querySelector("#empid").value)) {
+                        this.arr[i].email = document.querySelector("#email").value;
+                        break;
+                    }
+                }
+                document.querySelector("#msg").innerHTML = "Employee Email is Modified Successfully";
+            }
+
+            removeItemDetailsLogic() {
+                for (let i = 0; i < this.arr.length; i++) {
+                    if (this.arr[i].empid == document.querySelector("#empid").value) {
+                        this.arr.splice(i, 1);
+                        break;
+                    }
+                }
+                document.querySelector("#empid").value = "";
+                document.querySelector("#empname").value = "";
+                document.querySelector("#email").value = "";
+                document.querySelector("#deptid").value = "";
+                document.querySelector("#msg").innerHTML = "Employee details is Deleted Successfully";
+            }
+
+            viewall() {
+                let out = [];
+                for (let i = 0; i < this.arr.length; i++) {
+                    out[i] = "[ " + this.arr[i].empid + "," + this.arr[i].empname + "," + this.arr[i].email + "," + this.arr[i].deptid + "]";
+                }
+                document.querySelector("#array").innerHTML = "[ " + out + " ]";
+            }
+            buttonViewer(outputt) {
+
+                if (outputt.result == true) {
+                    //console.log(num);
+                    document.querySelector("#empname").value = outputt.empdetails.empname;
+                    document.querySelector("#email").value = outputt.empdetails.email;
+                    document.querySelector("#deptid").value = outputt.empdetails.deptid;
+
+                    document.querySelector("#add").disabled = true;
+                    document.querySelector("#modify").disabled = false;
+                    document.querySelector("#remove").disabled = false;
+                    document.querySelector("#viewall").disabled = false;
+                    document.querySelector("#dept").disabled = true;
+                    document.querySelector("#msg").innerHTML = "Employee is present in Array object";
+                }
+                else {
+                    //console.log(num);
+                    document.querySelector("#empname").value = "";
+                    document.querySelector("#email").value = "";
+                    document.querySelector("#deptid").value = "";
+                    document.querySelector("#add").disabled = false;
+                    document.querySelector("#modify").disabled = true;
+                    document.querySelector("#remove").disabled = true;
+                    document.querySelector("#viewall").disabled = true;
+                    document.querySelector("#dept").disabled = true;
+                    document.querySelector("#msg").innerHTML = "Employee is not present in Array object";
+                }
+            }
+
+        }
+        //event handling
+        window.addEventListener('DOMContentLoaded', () => {
+
+            let logic = new Logic();
+            console.log(logic.arr);
+            console.log(logic.arr[0].empname);
+            let empid = document.querySelector("#empid");
+            empid.addEventListener('blur', () => {
+                let empid = document.querySelector("#empid").value;
+
+                let outputt = logic.getItemDetailsLogic(empid);
+                console.log(outputt);
+                logic.buttonViewer(outputt);
+            });
+            //add
+            let add = document.querySelector("#add");
+            add.addEventListener('click', () => {
+
+                let empid = parseInt(document.querySelector("#empid").value);
+                let empname = document.querySelector("#empname").value;
+                let email = document.querySelector("#email").value;
+                let deptid = parseInt(document.querySelector("#deptid").value);
+                let obj = { empid, empname, email, deptid };
+
+                logic.addItemDetailsLogic(obj);
+
+            });
+            //modify
+
+            let modify = document.querySelector("#modify");
+            modify.addEventListener('click', () => {
+                logic.modifyItemDetailsLogic();
+
+            });
+
+            //remove
+
+            let remove = document.querySelector("#remove");
+            remove.addEventListener('click', () => {
+                logic.removeItemDetailsLogic();
+
+            });
+         //viewall
+
+            let veiw = document.querySelector("#viewall");
+            veiw.addEventListener('click', () => {
+
+                logic.viewall();
+
+            });
+
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Array of Employees</h1>
+    ID  :=<input type="text" id="empid" placeholder="Employee ID">
+    <span id="msg">Message </span>
+    <br><br>
+    Name  :=<input type="text" id="empname" placeholder="Employee Name"><br><br>
+    Email  :=<input type="text" id="email" placeholder="Employee Email"><br><br>
+    Dept   :=<input type="text" id="deptid" placeholder="Employee Department ID"><br><br>
+
+    <button id="add" disabled>Add</button>
+    <button id="modify" disabled>Modify</button>
+    <button id="remove" disabled>Remove</button>
+    <button id="viewall" disabled>View All</button>
+    <button id="dept" disabled>View on Deptid</button>
+
+    <hr>
+    <p> List of Emoloyee : <span id="array">Array View All</span></p>
+
+</body>
+
+</html>

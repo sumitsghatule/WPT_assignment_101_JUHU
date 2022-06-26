@@ -1,0 +1,156 @@
+<html>
+<head>
+    <script>    
+
+    window.addEventListener("DOMContentLoaded", ()=>{
+        console.log("Started Running");
+
+
+        const arr=[10,11,12,13,14,15,16,17,19,18,20];
+       	console.log(arr);
+       
+                  
+        //Text blur event.............
+      const textId=document.querySelector("#t1");
+      
+      textId.addEventListener('blur',()=>{
+       
+        let textId=document.querySelector('#t1').value;
+
+          if(checkNum(textId)){
+
+            console.log("Edit and Delete option available");
+
+            document.querySelector("#edit").disabled=false;
+            document.querySelector("#delete").disabled=false;
+            document.querySelector("#add").disabled=true;
+            document.querySelector("#viewAll").disabled=true;
+            document.querySelector("#showOdd").disabled=true;
+               
+        }else{
+            console.log("Edit and delete option disabled");
+
+                    document.querySelector("#add").disabled=false;                    
+                    document.querySelector("#edit").disabled=true;
+                    document.querySelector("#delete").disabled=true;
+                    document.querySelector("#viewAll").disabled=false;
+                    document.querySelector("#showOdd").disabled=false;           
+
+                }
+
+                });
+
+                //Add element in array Event....
+           const addNum=document.querySelector('#add');
+           addNum.addEventListener('click',()=>{
+          
+            arr.push(document.querySelector('#t1').value);
+
+            document.querySelector("#add").disabled=true;
+            document.querySelector("#changes").innerHTML='Element Added';
+           
+
+           });  
+           
+           // ViewAll element in array Event ...
+           const viewAll = document.querySelector('#viewAll');
+           viewAll.addEventListener('click',()=>{
+            showAll();
+           });
+
+         // Show Odd Position Event...
+           const showOdd=document.querySelector('#showOdd');
+           showOdd.addEventListener('click',()=>{
+               let arr1=[];
+               for(let i =0;i<arr.length;i++){
+                   if(i%2!== 0){
+                       arr1.push(arr[i]);
+                   }
+               }
+
+               document.querySelector("#msg").innerHTML= 'Odd Positions in List are: '+arr1.toString();
+           });
+
+
+           //Delete element in array Event...
+
+           const deleteNum =document.querySelector("#delete");
+           deleteNum.addEventListener('click',()=>{
+               let textNum = document.querySelector("#t1").value;
+               arr.pop(textNum);
+               document.querySelector("#delete").disabled=true;
+               document.querySelector("#edit").disabled=true;
+            document.querySelector("#changes").innerHTML='Element Deleted';
+               
+			   
+
+               document.querySelector("#msg").innerHTML='Number '+textNum+' deleted from list';
+			  
+           });
+
+           //Edit element in array Event....
+        const editId=document.querySelector("#edit");
+        editId.addEventListener('click',()=>{
+           let original= document.querySelector('#t1').value;
+            let randomVal = Math.floor(Math.random()*100)+1;
+             let val = prompt("Enter the Value : ");
+             if(!checkNum(val)){
+                  arr.pop(original);
+                  arr.push(val);
+            document.querySelector("#changes").innerHTML='Element Updated';
+
+                  document.querySelector("#edit").disabled=true;
+                  document.querySelector("#delete").disabled=true;
+                 
+                  document.querySelector("#msg").
+                  innerHTML='Number '+original+' changed to '+val;
+
+            } else{
+
+            document.querySelector("#changes").innerHTML='Cannot Update Element';
+
+            document.querySelector("#msg").innerHTML='Number '+original+' already present in the list';
+            }
+
+        });
+
+         function showAll(){
+        document.querySelector("#msg").innerHTML='All Elements are :'+arr.toString();
+
+    }
+
+    function checkNum(x){
+            for (let index = 0; index < arr.length; index++) {
+                if(x == arr[index])
+                {
+                    console.log("Already elemet present");
+                    return true;
+                }
+
+              }
+            return false;
+         }
+        
+
+    });
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <h1>Array Of Element</h1>
+    <input type="text" id="t1" typeholder="Enter the number">
+    <span id="changes">Massage shown here</span>
+    <br>
+    <button id="add" disabled> Add </button><br><br>
+    <button id="edit" disabled> Edit</button><br><br>
+    <button id="delete" disabled> Delete</button><br><br>
+    <button id="viewAll" disabled> View All</button><br><br>
+    <button id="showOdd" disabled> Show Odd Position</button><br><br>
+    <br>
+    <span id="msg">fetched Data will be......</span>
+    
+</body>
+
+</html>
