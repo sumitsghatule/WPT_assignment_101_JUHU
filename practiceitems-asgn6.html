@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+            console.log("page loaded");
+
+            $('#empno').blur(() => {
+                console.log("blur event occurred");
+
+                let input = {empno: $('#empno').val()}
+                let ajaxparameters = {
+                    data: input,
+                    url: 'http://localhost:90/getdetails',
+                    type: 'get',
+                    dataType: 'json',
+                    success: (datafromserver) => {
+                        if(datafromserver.status === true){
+                            console.log("Data fetched Successfully");
+                            $('#empname').val(datafromserver.empdetails.empname);
+                            $('#mobileno').val(datafromserver.empdetails.mobileno);
+                            $('#msg').text("Employee details found");
+                            $('#insert').prop("disabled", true);
+                            $('#update').prop("disabled", false);
+                            $('#delete').prop("disabled", false);
+                        }
+                        else{
+                            $('#empname').val("");
+                            $('#mobileno').val("");
+                            $('#msg').text("Employee details not found");
+                            $('#insert').prop("disabled", false);
+                            $('#update').prop("disabled", true);
+                            $('#delete').prop("disabled", true);
+                        }
+                    },
+                    error: (errorfromserver) => {
+                        console.log("Error occurred"+errorfromserver);
+                    }
+                }
+
+                $.ajax(ajaxparameters);
+            });
+
+            $('#insert').click(() => {
+                console.log("insert button clicked");
+
+                let input = {empno: $('#empno').val(), empname: $('#empname').val(), mobileno: $('#mobileno').val()}
+
+                let ajaxparameters= {
+                    data: input,
+                    url: 'http://localhost:90/insertemp',
+                    type: 'get',
+                    dataType: 'json',
+                    success: (datafromserver) => {
+                        if(datafromserver.status === true){
+                            console.log("Insert Successful");
+                            $('#msg').text("Insert Successful");
+                        }
+                        else{
+                            console.log("Insert Unsuccessful");
+                            $('#msg').text("Insert Unsuccessful");
+                        }
+                    },
+                    error: (errorfromserver) => {
+                        console.log(errorfromserver);
+                        $('#msg').text("Error occurred");
+                    }
+                }
+                $.ajax(ajaxparameters);
+            });
+
+            $('#update').click(() => {
+                console.log("update button clicked");
+
+                let input = {empno: $('#empno').val(), empname: $('#empname').val(), mobileno: $('#mobileno').val()}
+
+                let ajaxparameters= {
+                    data: input,
+                    url: 'http://localhost:90/updateemp',
+                    type: 'get',
+                    dataType: 'json',
+                    success: (datafromserver) => {
+                        if(datafromserver.status === true){
+                            console.log("Update Successful");
+                            $('#msg').text("Update Successful");
+                        }
+                        else{
+                            console.log("Update Unsuccessful");
+                            $('#msg').text("Update Unsuccessful");
+                        }
+                    },
+                    error: (errorfromserver) => {
+                        console.log(errorfromserver);
+                        $('#msg').text("Error occurred");
+                    }
+                }
+                $.ajax(ajaxparameters);
+            });
+
+            $('#delete').click(() => {
+                console.log("delete button clicked");
+
+                let input = {empno: $('#empno').val()}
+
+                let ajaxparameters= {
+                    data: input,
+                    url: 'http://localhost:90/deleteemp',
+                    type: 'get',
+                    dataType: 'json',
+                    success: (datafromserver) => {
+                        if(datafromserver.status === true){
+                            console.log("Delete Successful");
+                            $('#msg').text("Delete Successful");
+                        }
+                        else{
+                            console.log("Delete Unsuccessful");
+                            $('#msg').text("Delete Unsuccessful");
+                        }
+                    },
+                    error: (errorfromserver) => {
+                        console.log(errorfromserver);
+                        $('#msg').text("Error occurred");
+                    }
+                }
+                $.ajax(ajaxparameters);
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h1>practicing everything in one program</h1>
+    <input type="text" name="empno" id="empno" placeholder="Employee Number">
+    <span id="msg"></span><br>
+    <input type="text" name="empname" id="empname" placeholder="Employee Name"><br>
+    <input type="text" name="mobileno" id="mobileno" placeholder="Employee Mobile Number"><br>
+    <input type="button" value="Insert" id="insert" disabled>
+    <input type="button" value="Update" id="update" disabled>
+    <input type="button" value="Delete" id="delete" disabled>
+    <hr>
+    <span id="display"></span>
+</body>
+</html>
